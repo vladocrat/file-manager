@@ -11,11 +11,6 @@
 #include "folderhandler.h"
 #include "filehandler.h"
 
-static void registerTypes() {
-    qmlRegisterType<BrowseController>("browsecontroller", 1, 0, "BrowseController");
-    qmlRegisterType<FolderHandler>("folderhandler", 1, 0, "FolderHandler");
-    qmlRegisterType<FileHandler>("filehandler", 1, 0, "FileHandler");
-}
 
 int main(int argc, char *argv[])
 {
@@ -27,7 +22,14 @@ int main(int argc, char *argv[])
                                                            "FileSystemModel", "Cannot create a FileSystemModel instance.");
 
 
-    registerTypes();
+    BrowseController browseController;
+   // qmlRegisterType<BrowseController>("browsecontroller", 1, 0, "BrowseController");
+    qmlRegisterSingletonInstance<BrowseController>("BrowseController", 1, 0, "BrowseController", &browseController);
+
+    qmlRegisterType<FolderHandler>("folderhandler", 1, 0, "FolderHandler");
+    qmlRegisterType<FileHandler>("filehandler", 1, 0, "FileHandler");
+
+
 
     QFileSystemModel* fsm = new DisplayFileSystemModel(&engine);
     fsm->setRootPath(QDir::homePath());

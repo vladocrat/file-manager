@@ -6,7 +6,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.15
 
 import filesystembrowser 1.0
-import browsecontroller 1.0
+import BrowseController 1.0
 import folderhandler 1.0
 import filehandler 1.0
 
@@ -19,13 +19,11 @@ Window
     visible: true
     title: qsTr("File Browser")
 
-    BrowseController { id: browseController }
-
     FileHandler { id: fileHandler }
 
     FolderHandler { id: folderHandler }
 
-    ControlPanel { id: row }
+    TopBar { id: topBar }
 
     PopupDialog{ id: createFolderFilePopup }
 
@@ -40,7 +38,7 @@ Window
         id: db
         width: parent.width / 2 - 100
         height: parent.height
-        anchors.top: row.bottom
+        anchors.top: topBar.bottom
     }
 
     DirectoryView
@@ -49,7 +47,7 @@ Window
         width: root.width - db.width
         height: root.height
         anchors.left: db.right
-        anchors.top: row.bottom
+        anchors.top: topBar.bottom
     }
 
 

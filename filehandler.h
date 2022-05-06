@@ -16,6 +16,8 @@ public:
     Q_INVOKABLE bool replaceFile(const QString& filePath, const QString& filePathToReplace);
     Q_INVOKABLE bool fileExists(const QString& path);
     Q_INVOKABLE bool moveUp(const QString& path);
+
+
 };
 
 #endif // FILEHANDLER_H

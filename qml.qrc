@@ -5,13 +5,12 @@
         <file>DirectoryBrowser.qml</file>
         <file>DirectoryView.qml</file>
         <file>DirectoryViewDelegate.qml</file>
-        <file>ForwardButton.qml</file>
-        <file>BackwardButton.qml</file>
-        <file>ControlPanel.qml</file>
         <file>PopupDialog.qml</file>
         <file>WarningPopup.qml</file>
         <file>ElemActionMenue.qml</file>
         <file>ActionConfirmationPopup.qml</file>
         <file>ReplaceConfirmationPopup.qml</file>
+        <file>TopBar.qml</file>
+        <file>NavigationButton.qml</file>
     </qresource>
 </RCC>

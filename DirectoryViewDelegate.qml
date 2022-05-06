@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.0
+import BrowseController 1.0
 
 Rectangle
 {
@@ -80,7 +81,7 @@ Rectangle
             var url = folderModel.get(index, "fileUrl");
 
             if (folderModel.isFolder(index)) {
-                browseController.addForward(db.file);
+                BrowseController.addForward(url);
                 db.file = url;
             } else {
                 Qt.openUrlExternally(url);

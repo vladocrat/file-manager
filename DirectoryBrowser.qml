@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 import filesystembrowser 1.0
 
+import BrowseController 1.0
 TreeView
 {
     id: root
@@ -20,7 +21,8 @@ TreeView
 
     onActivated: {
         var url = fileSystemModel.data(index, FileSystemModel.UrlStringRole);
-        browseController.addForward(root.file);
+        BrowseController.addForward(url);
+        //console.log(root.file + " " + url)
         root.file = url;
     }
 }

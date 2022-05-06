@@ -4,30 +4,50 @@
 
 BrowseController::BrowseController()
 {
-
+    m_current.setUrl("file:///");
 }
 
-//not with button
-void BrowseController::addForward(const QString &url)
+void BrowseController::addForward(const QUrl& url)
 {
-    backward.append(url);
-}
-
-QString BrowseController::moveForward(const QString& url)
-{
-    if (!forward.empty()) {
-        backward.append(url);
-        return forward.pop();
+    if (url.fileName() != "") {
+        backward.append(m_current);
+        emit backwardAvaliableChanged();
     }
-    return url;
+    m_current = url;
+    emit currentChanged();
 }
 
-
-QString BrowseController::moveBackward(const QString& url)
+void BrowseController::moveForward()
 {
-    if (!backward.empty()) {
-        forward.append(url);
-        return backward.pop();
+    if (forward.empty() || m_current == forward.top()) {
+        return;
+    } else {
+        backward.append(m_current);
+        m_current = forward.top();
+        forward.pop();
+        emit backwardAvaliableChanged();
+        emit forwardAvaliableChanged();
+        emit currentChanged();
     }
-    return url;
+}
+
+void BrowseController::moveBackward()
+{
+    if (backward.empty() || m_current == backward.top()) {
+        return;
+    } else {
+        forward.append(m_current);
+        m_current = backward.top();
+        backward.pop();
+        emit forwardAvaliableChanged();
+        emit backwardAvaliableChanged();
+        emit currentChanged();
+    }
+}
+
+void BrowseController::clear()
+{
+    backward.clear();
+    forward.clear();
+    m_current.setUrl("");
 }

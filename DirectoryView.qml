@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import Qt.labs.folderlistmodel 2.0
 import filesystembrowser 1.0
 import QtQml.Models 2.2
+import BrowseController 1.0
 
 Rectangle
 {
@@ -22,7 +23,7 @@ Rectangle
         model: FolderListModel
         {
             id: folderModel
-            folder: db.file
+            folder: BrowseController.current
             showDirsFirst: true
         }
 
