@@ -7,7 +7,7 @@ TreeView
 {
     id: root
 
-    property string file: "file:///c:/"
+    property string file: "file:///C:/"
 
     model: fileSystemModel
     rootIndex: rootPathIndex
@@ -22,7 +22,6 @@ TreeView
     onActivated: {
         var url = fileSystemModel.data(index, FileSystemModel.UrlStringRole);
         BrowseController.addForward(url);
-        //console.log(root.file + " " + url)
-        root.file = url;
+        //root.file = url;
     }
 }

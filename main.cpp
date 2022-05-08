@@ -9,28 +9,30 @@
 #include "displayfilesystemmodel.h"
 #include "browsecontroller.h"
 #include "folderhandler.h"
-#include "filehandler.h"
 
+#include "actioncontroller.h"
 
 int main(int argc, char *argv[])
 {
 
     QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
+
 
     qmlRegisterUncreatableType<DisplayFileSystemModel>("filesystembrowser", 1, 0,
                                                            "FileSystemModel", "Cannot create a FileSystemModel instance.");
 
 
+
     BrowseController browseController;
-   // qmlRegisterType<BrowseController>("browsecontroller", 1, 0, "BrowseController");
+    FolderHandler folderHandler;
+    ActionController actionController;
     qmlRegisterSingletonInstance<BrowseController>("BrowseController", 1, 0, "BrowseController", &browseController);
+    qmlRegisterSingletonInstance<FolderHandler>("FolderHandler", 1, 0, "FolderHandler", &folderHandler);
+    qmlRegisterSingletonInstance<ActionController>("ActionController", 1, 0, "ActionController", &actionController);
 
-    qmlRegisterType<FolderHandler>("folderhandler", 1, 0, "FolderHandler");
-    qmlRegisterType<FileHandler>("filehandler", 1, 0, "FileHandler");
+    QQmlApplicationEngine engine;
 
-
-
+    //TODO when to delete?
     QFileSystemModel* fsm = new DisplayFileSystemModel(&engine);
     fsm->setRootPath(QDir::homePath());
     fsm->setResolveSymlinks(true);

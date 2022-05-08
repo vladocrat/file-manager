@@ -7,8 +7,7 @@ import QtQuick.Layouts 1.15
 
 import filesystembrowser 1.0
 import BrowseController 1.0
-import folderhandler 1.0
-import filehandler 1.0
+
 
 Window
 {
@@ -19,13 +18,9 @@ Window
     visible: true
     title: qsTr("File Browser")
 
-    FileHandler { id: fileHandler }
-
-    FolderHandler { id: folderHandler }
-
     TopBar { id: topBar }
 
-    PopupDialog{ id: createFolderFilePopup }
+    PopupDialog { id: createFolderFilePopup }
 
     WarningPopup { id: warningPopup }
 

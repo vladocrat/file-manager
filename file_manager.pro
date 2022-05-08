@@ -5,9 +5,9 @@ QT +=  qml quick widgets
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        actioncontroller.cpp \
         browsecontroller.cpp \
         displayfilesystemmodel.cpp \
-        filehandler.cpp \
         folderhandler.cpp \
         main.cpp
 
@@ -25,8 +25,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Utils.h \
+    actioncontroller.h \
     browsecontroller.h \
     displayfilesystemmodel.h \
-    filehandler.h \
     folderhandler.h
+
+DISTFILES +=

@@ -15,6 +15,7 @@ Popup
     focus: true
     closePolicy: Popup.CloseOnEscape
 
+    //TODO remove rectangle and use what popup provides
     Rectangle
     {
         id: container

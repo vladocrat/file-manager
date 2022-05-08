@@ -1,18 +1,28 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.0
+
 import BrowseController 1.0
+import FolderHandler 1.0
+import ActionController 1.0
 
 Rectangle
 {
     id: root
 
+    property string pressedColor: "#999494"
+    property string hoverColor: "grey"
+    property string selectedColor: "#5f67fa"
+
     color: {
         if(mouseArea.pressed) {
-            return "#999494"
+            return pressedColor;
         } else if (mouseArea.containsMouse) {
-            return "grey"
+            return ListView.isCurrentItem ? selectedColor : hoverColor;
+        } else if (ListView.isCurrentItem) {
+            return selectedColor;
         }
-        return "white"
+
+        return "white";
     }
 
     Rectangle
@@ -65,6 +75,7 @@ Rectangle
         drag.target: dragRect
         hoverEnabled: true
 
+        //TODO delete all z interactions
         z: parent.z + 1
 
 
@@ -74,6 +85,9 @@ Rectangle
             }
         }
 
+        onClicked: {
+            lw.currentIndex = index
+        }
 
         onDoubleClicked: {
             //if a folder -> open a folder -> change view to that folder
@@ -132,32 +146,21 @@ Rectangle
             console.log("moved", dragRect.dragItemIndex);
             var from = folderModel.get(drag.source.dragItemIndex, "fileUrl");
             var to = folderModel.get(dragRect.dragItemIndex, "fileUrl");
-
-            if (!folderModel.isFolder(to)) {
-                return;
-            }
-
-            if (folderModel.isFolder(from)) {
-                print("from (folder): " + from + " to: " + to);
-                if (!folderHandler.moveFolder(from, to)) {
-                    setUpMessageBox("unable to move folder");
-                }
-            } else {
-                print("from (file): " + from + " to: " + to);
-                if (!fileHandler.moveFile(from, to)) {
-                    setUpMessageBox("unable to move file");
-                    }
-            }
+            console.log("from: " + from);
+            console.log("to: " + to);
+            //TODO add popup
+            console.log("folder moved: " + ActionController.moveFolder(from, to));
         }
 
+        //TODO needed at all? look at Win10 impl
         function setUpMessageBox(msg) {
             warningPopup.msg = msg;
             warningPopup.open();
-
         }
 
         states: [
             State {
+                //TODO highlight only when able to drop
                 when: dragTarget.containsDrag
                 PropertyChanges {
                     target: root

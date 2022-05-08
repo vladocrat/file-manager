@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
+import FolderHandler 1.0
+import ActionController 1.0
 
 Menu
 {
@@ -21,30 +23,29 @@ Menu
     MenuItem {
         text: "move up"
 
+
         onTriggered: {
-           var url = folderModel.get(index, "fileUrl");
-           if (folderModel.isFolder(index)) {
-               folderHandler.moveUp(url);
-           } else {
-               fileHandler.moveUp(url);
-           }
+            var url = folderModel.get(index, "fileUrl");
+            console.log("was able to move folder up: " + ActionController.moveDirUp(url));
         }
+
     }
 
     MenuItem
     {
-       text: "copy"
+        text: "copy"
 
-       onTriggered: {
-           var url = folderModel.get(index, "fileUrl");
-           print("copy url is: " + url);
-           contextMenu.pasteState = true;
-           dv.copyUrl = url;
-           dv.isFolder = folderModel.isFolder(index);
-       }
+        onTriggered: {
+            var url = folderModel.get(index, "fileUrl");
+            print("copy url is: " + url);
+            //TODO references bad
+            contextMenu.pasteState = true;
+            dv.copyUrl = url;
+            dv.isFolder = folderModel.isFolder(index);
+        }
     }
 
-
+      //TODO change to signals?
     function setUpAndOpenActionConfirmationPopup(isFolder, url, msg) {
         actionConfirmationPopup.folder = isFolder
         actionConfirmationPopup.url = url;

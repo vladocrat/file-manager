@@ -4,7 +4,7 @@
 
 BrowseController::BrowseController()
 {
-    m_current.setUrl("file:///");
+
 }
 
 void BrowseController::addForward(const QUrl& url)
@@ -49,5 +49,5 @@ void BrowseController::clear()
 {
     backward.clear();
     forward.clear();
-    m_current.setUrl("");
+    m_current.setUrl("file:///C:/");
 }

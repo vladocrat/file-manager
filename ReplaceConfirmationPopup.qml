@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.12
+import FolderHandler 1.0
+import ActionController 1.0
 
 Popup
 {
@@ -9,8 +11,7 @@ Popup
     property string msg: ""
     property string url: ""
     property string pasteUrl: ""
-    //true -> folder, false -> file
-    property bool folder: true
+    property bool isFolder: true
 
     x: Math.round((parent.width - width) / 2)
     y: Math.round((parent.height - height) / 2)
@@ -96,17 +97,22 @@ Popup
                 }
 
                 onClicked: {
+                    /*
+//                    if (root.folder) {
+//                        if (FolderHandler.replaceFolder(root.url, root.pasteUrl)) {
+//                            warningPopup.msg = "unable to replace " + getShortPath(root.url);
+//                            warningPopup.open();
+//                        }
+//                    } else {
+//                        if (!fileHandler.replaceFile(root.url, root.pasteUrl)) {
+//                            warningPopup.msg = "unable to replace " + getShortPath(root.url);
+//                            warningPopup.open();
+//                        }
+//                    }
+                    */
 
-                    if (root.folder) {
-                        if (folderHandler.replaceFolder(root.url, root.pasteUrl)) {
-                            warningPopup.msg = "unable to replace " + getShortPath(root.url);
-                            warningPopup.open();
-                        }
-                    } else {
-                        if (!fileHandler.replaceFile(root.url, root.pasteUrl)) {
-                            warningPopup.msg = "unable to replace " + getShortPath(root.url);
-                            warningPopup.open();
-                        }
+                    if (ActionController.replaceFolder(root.url, root.folder, root.isFolder)) {
+                        //TODO something with popups???
                     }
                     root.close();
                 }

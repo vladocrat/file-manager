@@ -1,6 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import FolderHandler 1.0
+import BrowseController 1.0
+import ActionController 1.0
 
 Popup
 {
@@ -40,8 +43,9 @@ Popup
 
             TextInput
             {
-                id: ti
+                id: textInput
 
+                focus: true
                 anchors.fill: parent
                 anchors.leftMargin: 5
                 verticalAlignment: TextInput.AlignVCenter
@@ -77,7 +81,7 @@ Popup
                 }
 
                 onClicked: {
-                    ti.text = "";
+                    textInput.text = "";
                     root.close();
                 }
             }
@@ -90,9 +94,7 @@ Popup
                 height: 35
 
                 hoverEnabled: true
-                enabled: ti.text.length > 0
-
-                //palette.button: hovered ? "red" : "white"
+                enabled: textInput.text.length > 0
 
                 Text
                 {
@@ -105,37 +107,20 @@ Popup
                 }
 
                 onClicked: {
-                    root.folderName = ti.text;
-                    var fullFilePath = db.file + "/" + ti.text;
-                    print("full path to folder/file: " + fullFilePath);
+                    root.folderName = textInput.text;
+                    var fullFilePath = BrowseController.current + "/" + textInput.text;
+                    console.log("full path to folder/file: " + fullFilePath);
 
-                    ti.text = "";
 
-                    if (root.folder) {
-                        //if folder
-                        if (folderHandler.folderExists(fullFilePath)) {
-                            setMessageAndOpenWarningPopup("folder \"" + root.folderName + "\" already exists");
-                            return;
-                        }
-
-                        if (!folderHandler.createFolder(db.file + "/" + root.folderName)) {
-                            setMessageAndOpenWarningPopup("unable to create folder");
-                        }
-
-                    } else {
-                        //if file
-                        if (fileHandler.fileExists(fullFilePath)) {
-                            setMessageAndOpenWarningPopup("file \"" + root.folderName + "\" already exists");
-                            return;
-                        }
-
-                        if (!fileHandler.createFile(db.file + "/" + root.folderName)) {
-                            setMessageAndOpenWarningPopup("unable to create file");
-                        }
+                    if (ActionController.createDir(fullFilePath, root.folder)) {
+                        //TODO something with popups?
                     }
+
+                    textInput.text = "";
                     root.close();
                 }
 
+                //TODO remove?
                 function setMessageAndOpenWarningPopup(msg) {
                     warningPopup.msg = msg;
                     warningPopup.open();

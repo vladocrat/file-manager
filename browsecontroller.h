@@ -6,7 +6,8 @@
 #include <QObject>
 #include <QUrl>
 
-class BrowseController : public QObject
+
+class BrowseController :  public QObject
 {
     Q_OBJECT;
 public:
@@ -38,7 +39,7 @@ signals:
 private:
     QStack<QUrl> forward;
     QStack<QUrl> backward;
-    QUrl m_current;
+    QUrl m_current = QUrl("file:///C:/");
 };
 
 #endif // BROWSECONTROLLER_H
