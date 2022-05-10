@@ -44,14 +44,9 @@ bool ActionController::createDir(const QUrl &path, bool isFolder)
     return folderHandler.createFile(path);
 }
 
-bool ActionController::replaceFolder(const QUrl &path, const QUrl& pathToReplace, bool isFolder)
+bool ActionController::replaceFolderFile(const QUrl &path, const QUrl& pathToReplace)
 {
-    //TODO rework the whole system....
-    if (isFolder) {
-        return folderHandler.replaceFile(path, pathToReplace);
-    }
-
-    return folderHandler.replaceFile(path, pathToReplace);
+    return folderHandler.replaceFolderFile(path, pathToReplace);
 }
 
 bool ActionController::copyFolder(const QUrl &from, const QUrl &to)

@@ -1,6 +1,7 @@
 #ifndef DISPLAYFILESYSTEMMODEL_H
 #define DISPLAYFILESYSTEMMODEL_H
 
+#include <QQmlEngine>
 #include <QDir>
 #include <QFileSystemModel>
 
@@ -19,6 +20,13 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int,QByteArray> roleNames() const override;
+
+    static void registerType() {
+        qmlRegisterUncreatableType<DisplayFileSystemModel>("filesystembrowser", 1, 0,
+                                                           "FileSystemModel",
+                                                           "Cannot create a FileSystemModel instance.");
+    }
+
 };
 
 #endif // DISPLAYFILESYSTEMMODEL_H

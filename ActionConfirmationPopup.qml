@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import FolderHandler 1.0
 import ActionController 1.0
 
 Popup
@@ -108,20 +107,6 @@ Popup
 
                     }
                     root.close();
-
-                    /*
-                    if (folder) {
-                       if (!FolderHandler.deleteFolder(url)) {
-                           warningPopup.msg = msg + " folder " + path;
-                           warningPopup.open();
-                       }
-                    } else {
-                        if (FolderHandler.deleteFile(url)) {
-                            warningPopup.msg = msg + " file " + path;
-                        }
-                    }
-                    */
-
                 }
             }
         }

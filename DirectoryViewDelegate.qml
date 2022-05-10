@@ -2,16 +2,19 @@ import QtQuick 2.15
 import QtQuick.Controls 2.0
 
 import BrowseController 1.0
-import FolderHandler 1.0
 import ActionController 1.0
+import FileInfo 1.0
 
 Rectangle
 {
     id: root
 
+    signal currentItemChanged(var name, var size, var creationDate, var isFolder);
+
     property string pressedColor: "#999494"
     property string hoverColor: "grey"
     property string selectedColor: "#5f67fa"
+    property string notSeleceted: "white"
 
     color: {
         if(mouseArea.pressed) {
@@ -21,23 +24,21 @@ Rectangle
         } else if (ListView.isCurrentItem) {
             return selectedColor;
         }
-
-        return "white";
+        return notSeleceted;
     }
 
-    Rectangle
+    Image
     {
         id: image
-        z: parent.z + 1
-        width: 10
-        height: 10
-        color: folderModel.isFolder(index) ? "green" : "yellow"
+        width: 20
+        height: 20
+        source: folderModel.isFolder(index) ? "/images/folder.png" : "/images/file.png"
 
         anchors
         {
             verticalCenter: parent.verticalCenter
             left: root.left
-            leftMargin: 7
+            leftMargin: 10
         }
     }
 
@@ -46,7 +47,8 @@ Rectangle
     {
         id: text
 
-        leftPadding: 25
+        leftPadding: 10
+        anchors.left: image.right
         anchors.verticalCenter: parent.verticalCenter
         text: fileName
     }
@@ -86,7 +88,14 @@ Rectangle
         }
 
         onClicked: {
-            lw.currentIndex = index
+            lw.currentIndex = index;
+            var url = folderModel.get(index, "fileUrl");
+            console.log(url);
+            var name = FileInfo.name(url);
+            var size = FileInfo.size(url);
+            var date = FileInfo.creationDate(url);
+            var isFolder = FileInfo.isFolder(url);
+            currentItemChanged(name, size, date, isFolder);
         }
 
         onDoubleClicked: {
@@ -96,7 +105,7 @@ Rectangle
 
             if (folderModel.isFolder(index)) {
                 BrowseController.addForward(url);
-                db.file = url;
+                directoryBrowser.file = url;
             } else {
                 Qt.openUrlExternally(url);
             }
@@ -160,11 +169,11 @@ Rectangle
 
         states: [
             State {
-                //TODO highlight only when able to drop
+                //TODO enable drag area only when able to drop...
                 when: dragTarget.containsDrag
                 PropertyChanges {
                     target: root
-                    color: "red"
+                    color: !folderModel.isFolder(dragRect.dragItemIndex) ? "red" : "green"
                 }
             }
         ]

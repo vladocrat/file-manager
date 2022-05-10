@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.12
-import FolderHandler 1.0
 import ActionController 1.0
 
 Popup
@@ -49,7 +48,7 @@ Popup
         {
             spacing: 90
 
-            Rectangle
+            Item
             {
                 width: 1
                 height: cancel.height
@@ -97,28 +96,15 @@ Popup
                 }
 
                 onClicked: {
-                    /*
-//                    if (root.folder) {
-//                        if (FolderHandler.replaceFolder(root.url, root.pasteUrl)) {
-//                            warningPopup.msg = "unable to replace " + getShortPath(root.url);
-//                            warningPopup.open();
-//                        }
-//                    } else {
-//                        if (!fileHandler.replaceFile(root.url, root.pasteUrl)) {
-//                            warningPopup.msg = "unable to replace " + getShortPath(root.url);
-//                            warningPopup.open();
-//                        }
-//                    }
-                    */
-
-                    if (ActionController.replaceFolder(root.url, root.folder, root.isFolder)) {
+                    //TODO takes 2 args?
+                    if (ActionController.replaceFolder(root.url)) {
                         //TODO something with popups???
                     }
                     root.close();
                 }
             }
 
-            Rectangle
+            Item
             {
                 width: 1
                 height: cancel.height

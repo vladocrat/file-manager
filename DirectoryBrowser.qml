@@ -3,6 +3,7 @@ import QtQuick.Controls 1.4
 import filesystembrowser 1.0
 
 import BrowseController 1.0
+
 TreeView
 {
     id: root

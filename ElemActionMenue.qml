@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import FolderHandler 1.0
 import ActionController 1.0
 
 Menu
@@ -13,6 +12,7 @@ Menu
     MenuItem
     {
         text: "delete"
+
         onTriggered: {
             var url = folderModel.get(index, "fileUrl");
             setUpAndOpenActionConfirmationPopup(folderModel.isFolder(index), url, "delete ");
@@ -22,7 +22,6 @@ Menu
 
     MenuItem {
         text: "move up"
-
 
         onTriggered: {
             var url = folderModel.get(index, "fileUrl");
@@ -37,11 +36,11 @@ Menu
 
         onTriggered: {
             var url = folderModel.get(index, "fileUrl");
-            print("copy url is: " + url);
+            console.log("copy url is: " + url);
             //TODO references bad
             contextMenu.pasteState = true;
-            dv.copyUrl = url;
-            dv.isFolder = folderModel.isFolder(index);
+            directoryView.copyUrl = url;
+            directoryView.isFolder = folderModel.isFolder(index);
         }
     }
 

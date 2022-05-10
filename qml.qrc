@@ -12,5 +12,8 @@
         <file>ReplaceConfirmationPopup.qml</file>
         <file>TopBar.qml</file>
         <file>NavigationButton.qml</file>
+        <file>images/file.png</file>
+        <file>images/folder.png</file>
+        <file>FilePreview.qml</file>
     </qresource>
 </RCC>

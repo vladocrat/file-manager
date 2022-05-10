@@ -13,7 +13,7 @@ Window
 {
     id: root
 
-    width: 640
+    width: 840
     height: 480
     visible: true
     title: qsTr("File Browser")
@@ -30,21 +30,39 @@ Window
 
     DirectoryBrowser
     {
-        id: db
-        width: parent.width / 2 - 100
+        id: directoryBrowser
+        width: parent.width / 4
         height: parent.height
         anchors.top: topBar.bottom
     }
 
     DirectoryView
     {
-        id: dv
-        width: root.width - db.width
+        id: directoryView
+        width: root.width / 2
         height: root.height
-        anchors.left: db.right
+        anchors.left: directoryBrowser.right
         anchors.top: topBar.bottom
+
+        onItemSelected: {
+            filePreview.isFolder = isFolder
+            filePreview.fileName = name
+            filePreview.fileSize = size
+            filePreview.creationDate = creationDate
+        }
     }
 
 
+    FilePreview {
+        id: filePreview
 
+        height: root.height
+        width: root.width - directoryBrowser.width - directoryView.width
+        anchors {
+            left: directoryView.right
+            top: topBar.bottom
+            right: root.right
+        }
+
+    }
 }

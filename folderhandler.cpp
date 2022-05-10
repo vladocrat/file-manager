@@ -126,14 +126,20 @@ bool FolderHandler::copyFile(const QUrl &from, const QUrl &to)
     return QFile::copy(dir.absolutePath(), formatedTo + "/" + dir.dirName());
 }
 
-bool FolderHandler::replaceFile(const QUrl &filePath, const QUrl &filePathToReplace)
+bool FolderHandler::replaceFolderFile(const QUrl &filePath, const QUrl &filePathToReplace)
 {
+    //TODO check if it even works
     QDir dir(filePath.toLocalFile());
     if (!deleteFile(filePathToReplace.toLocalFile() + "/" + dir.dirName())) {
         return false;
     }
 
-    return moveFile(filePath, QUrl(filePathToReplace.toLocalFile() + "/" + dir.dirName()));
+    QUrl destination = QUrl(filePathToReplace.toLocalFile() + "/" + dir.dirName());
+    if (isFolder(filePath)) {
+        return moveFolder(filePath, destination);
+    }
+
+    return moveFile(filePath, destination);
 }
 
 bool FolderHandler::fileExists(const QUrl &path)

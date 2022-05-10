@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import FolderHandler 1.0
 import ActionController 1.0
 import BrowseController 1.0
 
@@ -34,64 +33,25 @@ Menu
         onTriggered: {
             var pasteUrl = BrowseController.current
             console.log("pasteUrl: " + pasteUrl);
-            console.log("copyUrl: " + dv.copyUrl);
+            console.log("copyUrl: " + directoryView.copyUrl);
 
             var msg = "";
-            if (dv.copyUrl === pasteUrl) {
+            if (directoryView.copyUrl === pasteUrl) {
                 console.log("copy url == paste url");
                 //should just make a copy of a folder/file and add "-- copy at the end of the name"
-                 if (ActionController.makecopy(copyUrl)) {
+                if (ActionController.makecopy(copyUrl)) {
                     //TODO
                 }
 
-                /*
-
-                //                if (dv.isFolder) {
-                //                    msg = "replace existing folder " + replaceConfirmationPopup.getShortPath(dv.copyUrl) + "?";
-                //                    setAndOpenReplaceConfirmationPopup(true,
-                //                                                       msg,
-                //                                                       copyUrl,
-                //                                                       pasteUrl);
-                //                } else {
-                //                    msg = "replace existing file " + replaceConfirmationPopup.getShortPath(copyUrl) + "?";
-                //                    setAndOpenReplaceConfirmationPopup(false,
-                //                                                       msg,
-                //                                                       copyUrl,
-                //                                                       pasteUrl);
-                //                }
-                //                root.pasteState = true;
-                //                return;
-                */
+                var index = folderModel.indexOf(copyUrl);
+                if (ActionController.copyFolder(copyUrl, BrowseController.current)) {
+                    //TODO
+                }
+                root.pasteState = true;
             }
-
-            /*
-            //            if (dv.isFolder) {
-            //                if (!FolderHandler.copyFolder(copyUrl, pasteUrl + "/" + replaceConfirmationPopup.getShortPath(copyUrl))) {
-            //                    msg = "replace existing folder " + replaceConfirmationPopup.getShortPath(dv.copyUrl) + "?";
-            //                    setAndOpenReplaceConfirmationPopup(true,
-            //                                                       msg,
-            //                                                       copyUrl,
-            //                                                       pasteUrl);
-            //                }
-
-            //            } else {
-            //                msg = "replace existing file " + replaceConfirmationPopup.getShortPath(copyUrl) + "?";
-            //                if (!fileHandler.copyFile(copyUrl, pasteUrl)) {
-            //                    setAndOpenReplaceConfirmationPopup(false,
-            //                                                       msg,
-            //                                                       copyUrl,
-            //                                                       pasteUrl);
-            //                }
-            //            }
-            */
-            var index = folderModel.indexOf(copyUrl);
-            if (ActionController.copyFolder(copyUrl, BrowseController.current)) {
-                //TODO
-            }
-            root.pasteState = true;
         }
-    }
 
+    }
     function setAndOpenReplaceConfirmationPopup(isFolder, msg, copyUrl, pasteUrl) {
         replaceConfirmationPopup.isFolder = isFolder;
         replaceConfirmationPopup.msg = msg;
@@ -105,4 +65,5 @@ Menu
         createFolderFilePopup.msg = msg;
         createFolderFilePopup.open();
     }
+
 }

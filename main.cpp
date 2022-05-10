@@ -5,40 +5,30 @@
 #include <QDebug>
 #include <QFileSystemModel>
 #include <QQmlContext>
+#include <memory>
 
 #include "displayfilesystemmodel.h"
 #include "browsecontroller.h"
-#include "folderhandler.h"
-
 #include "actioncontroller.h"
+#include "fileinfo.h"
 
 int main(int argc, char *argv[])
 {
 
     QGuiApplication app(argc, argv);
 
-
-    qmlRegisterUncreatableType<DisplayFileSystemModel>("filesystembrowser", 1, 0,
-                                                           "FileSystemModel", "Cannot create a FileSystemModel instance.");
-
-
-
-    BrowseController browseController;
-    FolderHandler folderHandler;
-    ActionController actionController;
-    qmlRegisterSingletonInstance<BrowseController>("BrowseController", 1, 0, "BrowseController", &browseController);
-    qmlRegisterSingletonInstance<FolderHandler>("FolderHandler", 1, 0, "FolderHandler", &folderHandler);
-    qmlRegisterSingletonInstance<ActionController>("ActionController", 1, 0, "ActionController", &actionController);
+    DisplayFileSystemModel::registerType();
+    ActionController::registerType();
+    BrowseController::registerType();
+    FileInfo::registerType();
 
     QQmlApplicationEngine engine;
 
-    //TODO when to delete?
-    QFileSystemModel* fsm = new DisplayFileSystemModel(&engine);
+    std::unique_ptr<QFileSystemModel> fsm(new DisplayFileSystemModel(&engine));
     fsm->setRootPath(QDir::homePath());
     fsm->setResolveSymlinks(true);
-    engine.rootContext()->setContextProperty("fileSystemModel", fsm);
-    engine.rootContext()->setContextProperty("rootPathIndex", fsm->index("C:/" /*fsm->rootPath()*/));
-
+    engine.rootContext()->setContextProperty("fileSystemModel", fsm.get());
+    engine.rootContext()->setContextProperty("rootPathIndex", fsm->index("C:/"));
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

@@ -1,6 +1,7 @@
 #ifndef BROWSECONTROLLER_H
 #define BROWSECONTROLLER_H
 
+#include <QQmlEngine>
 #include <QStack>
 #include <QString>
 #include <QObject>
@@ -29,6 +30,11 @@ public:
     void setCurrent(const QUrl& url) {
         m_current = url;
         emit currentChanged();
+    }
+
+    static void registerType() {
+        static BrowseController bc;
+        qmlRegisterSingletonInstance<BrowseController>("BrowseController", 1, 0, "BrowseController", &bc);
     }
 
 signals:

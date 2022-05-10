@@ -8,6 +8,7 @@ SOURCES += \
         actioncontroller.cpp \
         browsecontroller.cpp \
         displayfilesystemmodel.cpp \
+        fileinfo.cpp \
         folderhandler.cpp \
         main.cpp
 
@@ -28,6 +29,7 @@ HEADERS += \
     actioncontroller.h \
     browsecontroller.h \
     displayfilesystemmodel.h \
+    fileinfo.h \
     folderhandler.h
 
 DISTFILES +=

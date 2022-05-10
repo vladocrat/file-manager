@@ -10,6 +10,8 @@ Rectangle
 {
     id: root
 
+    signal itemSelected(var name, var size, var creationDate, var isFolder)
+
     property string copyUrl: ""
     property bool isFolder: false
 
@@ -30,7 +32,11 @@ Rectangle
         delegate: DirectoryViewDelegate
         {
             width: root.width
-            height: 22
+            height: 40
+
+            onCurrentItemChanged: {
+                itemSelected(name, size, creationDate, isFolder)
+            }
         }
     }
 
