@@ -10,6 +10,9 @@ Rectangle
     id: root
 
     signal currentItemChanged(var name, var size, var creationDate, var isFolder);
+    signal mouseEntered();
+    signal mouseExited();
+    signal currentIndexChanged(var index);
 
     property string pressedColor: "#999494"
     property string hoverColor: "grey"
@@ -27,9 +30,17 @@ Rectangle
         return notSeleceted;
     }
 
+    QtObject
+    {
+        id: internal
+
+        property bool canDrop: false
+    }
+
     Image
     {
         id: image
+
         width: 20
         height: 20
         source: folderModel.isFolder(index) ? "/images/folder.png" : "/images/file.png"
@@ -42,32 +53,20 @@ Rectangle
         }
     }
 
-
     Text
     {
         id: text
 
         leftPadding: 10
-        anchors.left: image.right
-        anchors.verticalCenter: parent.verticalCenter
         text: fileName
+        anchors
+        {
+            verticalCenter: parent.verticalCenter
+            left: image.right
+        }
     }
 
     ElemActionMenue { id: elemActionMenu }
-
-    Button
-    {
-        id: utilityMenu
-        z: parent.z + 3
-        text: "..."
-        height: parent.height
-        width: 40
-        anchors.right: root.right
-
-        onClicked: {
-            elemActionMenu.popup();
-        }
-    }
 
     MouseArea
     {
@@ -76,10 +75,15 @@ Rectangle
         anchors.fill: parent
         drag.target: dragRect
         hoverEnabled: true
+        acceptedButtons: Qt.AllButtons
 
-        //TODO delete all z interactions
-        z: parent.z + 1
+        onEntered: {
+           root.mouseEntered();
+        }
 
+        onExited: {
+            root.mouseExited();
+        }
 
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
@@ -88,14 +92,20 @@ Rectangle
         }
 
         onClicked: {
-            lw.currentIndex = index;
+            if (mouse.button === Qt.RightButton) {
+                elemActionMenu.popup();
+                root.currentIndexChanged(index);
+                return;
+            }
+
+            root.currentIndexChanged(index);
             var url = folderModel.get(index, "fileUrl");
             console.log(url);
             var name = FileInfo.name(url);
             var size = FileInfo.size(url);
             var date = FileInfo.creationDate(url);
             var isFolder = FileInfo.isFolder(url);
-            currentItemChanged(name, size, date, isFolder);
+            root.currentItemChanged(name, size, date, isFolder);
         }
 
         onDoubleClicked: {
@@ -105,7 +115,6 @@ Rectangle
 
             if (folderModel.isFolder(index)) {
                 BrowseController.addForward(url);
-                directoryBrowser.file = url;
             } else {
                 Qt.openUrlExternally(url);
             }
@@ -121,11 +130,12 @@ Rectangle
         states: [
             State {
                 when: dragRect.Drag.active
-                ParentChange
-                {
-                    target: dragRect
-                    parent: lw
-                }
+                //TODO What does it do exactly?
+//                ParentChange
+//                {
+//                    target: dragRect
+//                   // parent: root.parent
+//                }
 
                 AnchorChanges
                 {
@@ -147,16 +157,26 @@ Rectangle
     {
         id: dragTarget
 
+        property var dragItemIndex
+
         width: root.width
         height: root.height
 
+        onEntered:  {
+            dragItemIndex = drag.source.dragItemIndex
+        }
+
         onDropped: {
-            console.log("dragged", drag.source.dragItemIndex);
-            console.log("moved", dragRect.dragItemIndex);
             var from = folderModel.get(drag.source.dragItemIndex, "fileUrl");
             var to = folderModel.get(dragRect.dragItemIndex, "fileUrl");
             console.log("from: " + from);
             console.log("to: " + to);
+
+            if (!internal.canDrop) {
+                console.log("can't drop here");
+                return;
+            }
+
             //TODO add popup
             console.log("folder moved: " + ActionController.moveFolder(from, to));
         }
@@ -169,11 +189,27 @@ Rectangle
 
         states: [
             State {
-                //TODO enable drag area only when able to drop...
                 when: dragTarget.containsDrag
                 PropertyChanges {
                     target: root
-                    color: !folderModel.isFolder(dragRect.dragItemIndex) ? "red" : "green"
+                    color: {
+                        if (dragTarget.dragItemIndex === dragRect.dragItemIndex) {
+                            return "red";
+                        }
+
+                        return folderModel.isFolder(dragRect.dragItemIndex) ? "green" : "red";
+                    }
+                }
+
+                PropertyChanges {
+                    target: internal
+                    canDrop: {
+                        if (dragTarget.dragItemIndex === dragRect.dragItemIndex) {
+                            return false;
+                        }
+
+                        return folderModel.isFolder(dragRect.dragItemIndex);
+                    }
                 }
             }
         ]

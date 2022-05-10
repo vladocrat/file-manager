@@ -31,6 +31,7 @@ Window
     DirectoryBrowser
     {
         id: directoryBrowser
+
         width: parent.width / 4
         height: parent.height
         anchors.top: topBar.bottom
@@ -39,10 +40,14 @@ Window
     DirectoryView
     {
         id: directoryView
+
         width: root.width / 2
         height: root.height
-        anchors.left: directoryBrowser.right
-        anchors.top: topBar.bottom
+        anchors
+        {
+            left: directoryBrowser.right
+            top: topBar.bottom
+        }
 
         onItemSelected: {
             filePreview.isFolder = isFolder
@@ -53,12 +58,14 @@ Window
     }
 
 
-    FilePreview {
+    FilePreview
+    {
         id: filePreview
 
         height: root.height
         width: root.width - directoryBrowser.width - directoryView.width
-        anchors {
+        anchors
+        {
             left: directoryView.right
             top: topBar.bottom
             right: root.right

@@ -10,47 +10,74 @@ Rectangle
 {
     id: root
 
-    signal itemSelected(var name, var size, var creationDate, var isFolder)
+    signal itemSelected(var name, var size, var creationDate, var isFolder);
 
     property string copyUrl: ""
     property bool isFolder: false
 
     color: "white"
-    z: -1
+    border.width: 1
 
     ContextMenue { id: contextMenu }
 
-    DelegateModel {
+    DelegateModel
+    {
         id: visualModel
+
         model: FolderListModel
         {
             id: folderModel
+
             folder: BrowseController.current
             showDirsFirst: true
         }
 
         delegate: DirectoryViewDelegate
         {
+            id: delegate
+
             width: root.width
             height: 40
 
+            onCurrentIndexChanged: {
+                listView.currentIndex = index
+            }
+
+            onMouseEntered: {
+                mouseArea.enabled = false;
+            }
+
+            onMouseExited: {
+                mouseArea.enabled = true;
+            }
+
             onCurrentItemChanged: {
-                itemSelected(name, size, creationDate, isFolder)
+                itemSelected(name, size, creationDate, isFolder);
             }
         }
     }
 
-
     ListView
     {
-        id: lw
-        z: 1
-        anchors.fill: parent
+        id: listView
+
+        clip: true
+        width: root.width - 2
+        height: root.height - 2
+        anchors {
+            left: root.left
+            right: root.right
+            leftMargin: 1
+            rightMargin: 1
+        }
+
         model: visualModel
     }
 
     MouseArea
     {
+        id: mouseArea
+
         anchors.fill: parent
         acceptedButtons: Qt.AllButtons;
 
