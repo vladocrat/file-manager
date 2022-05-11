@@ -11,7 +11,7 @@ Rectangle {
 
     signal itemSelected(var name, var size, var creationDate, var isFolder);
     signal createFolderFile(var msg, var isFolder);
-    signal showMessage(var msg);
+    signal showPopupMessage(var msg);
 
     property string copyUrl: ""
 
@@ -21,12 +21,34 @@ Rectangle {
     ContextMenue {
         id: contextMenu
 
-        onCreateFolderFile: {
-            root.createFolderFile(msg, isFolder);
+        ContextMenuItem {
+            text: "New folder"
+
+            onTriggered: root.createFolderFile("enter folder name", true);
         }
 
-        onShowMessage: {
-            root.showMessage(msg);
+        ContextMenuItem {
+            text: "New file"
+
+            onTriggered: root.createFolderFile("enter file name", false);
+        }
+
+        ContextMenuItem {
+            text: "paste"
+            enabled: contextMenu.pasteState
+
+            onTriggered: {
+                var pasteUrl = BrowseController.current
+                console.log("pasteUrl: " + pasteUrl);
+                console.log("copyUrl: " + directoryView.copyUrl);
+                //Shouldn't reference directory view?
+                var index = folderModel.indexOf(copyUrl);
+                if (!ActionController.copyFolderFile(copyUrl, pasteUrl)) {
+                    root.showPopupMessage("failed to copy");
+                }
+
+                root.pasteState = true;
+            }
         }
     }
 
@@ -45,7 +67,7 @@ Rectangle {
             height: 40
 
             onShowMessage: {
-                root.showMessage(msg);
+                root.showPopupMessage(msg);
             }
 
             onCopyUrlChanged: {

@@ -10,10 +10,7 @@ CustomPopup {
     signal confirm();
     signal cancel();
 
-    //TODO not complited interface
-    property alias userInput: textInput.text
-    property int inputFontPointSize: 11
-    property bool focusInputField: true
+    property alias userInput: textInput
     property bool confirmEnabled: true
     property bool cancelEnabled: true
     property bool isFolder: true
@@ -23,7 +20,7 @@ CustomPopup {
     }
 
     function clearAndClose() {
-        root.userInput = "";
+        root.userInput.text = "";
         root.close();
     }
 
@@ -48,7 +45,7 @@ CustomPopup {
 
                 focus: root.focusInputField
                 verticalAlignment: TextInput.AlignVCenter
-                font.pointSize: root.inputFontPointSize
+                font.pointSize: 20
                 anchors {
                     fill: parent
                     leftMargin: 5
@@ -59,8 +56,8 @@ CustomPopup {
         ButtonsRow {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            confirmEnabled: root.confirmEnabled
-            cancelEnabled: root.cancelEnabled
+            confirmButton.enabled: root.confirmEnabled
+            cancelButton.enabled: root.cancelEnabled
 
             onCancel: root.cancel();
 

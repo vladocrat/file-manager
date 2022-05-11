@@ -30,8 +30,11 @@ Window {
 
         width: 300
         height: 120
-        confirmEnabled: createFolderFilePopup.userInput.length > 0
-
+        confirmEnabled: createFolderFilePopup.userInput.text.length > 0
+        userInput {
+            font.pointSize: 11
+            focus: true
+        }
 
         onCancel: {
             createFolderFilePopup.clearAndClose();
@@ -101,7 +104,7 @@ Window {
             top: topBar.bottom
         }
 
-        onShowMessage: {
+        onShowPopupMessage: {
             warningPopup.msg = msg;
             warningPopup.open();
         }

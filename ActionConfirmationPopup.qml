@@ -10,23 +10,22 @@ CustomPopup {
     signal confirm();
 
     property string msg: "message"
+    property int msgFontPointSize: 12
     property bool isFolder: true
-    property int inputFontPointSize: 12
-    property real verticalItemSpacing: 5
 
+    Component.onCompleted: open()
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: root.verticalItemSpacing
+        spacing: 2
 
         Item {
-            //TODO add params to public interface
             width: root.width - root.horizontalPadding - 1
             height: root.height / 2
 
             Text {
                 text: root.msg
-                font.pointSize: root.inputFontPointSize
+                font.pointSize: root.msgFontPointSize
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter

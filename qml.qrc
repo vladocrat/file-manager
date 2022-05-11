@@ -17,5 +17,6 @@
         <file>ButtonsRow.qml</file>
         <file>CustomPopup.qml</file>
         <file>PopupButton.qml</file>
+        <file>ContextMenuItem.qml</file>
     </qresource>
 </RCC>
