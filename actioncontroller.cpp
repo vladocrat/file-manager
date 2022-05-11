@@ -9,7 +9,7 @@ ActionController::ActionController(QObject *parent)
 
 }
 
-bool ActionController::moveFolder(const QUrl &from, const QUrl &to)
+bool ActionController::moveFolderFile(const QUrl &from, const QUrl &to)
 {
     if (!folderHandler.isFolder(to)) {
         return false;
@@ -27,14 +27,14 @@ bool ActionController::moveDirUp(const QUrl& path)
     return folderHandler.moveUp(path);
 }
 
-bool ActionController::createDir(const QUrl &path, bool isFolder)
+bool ActionController::createFolderFile(const QUrl &path, bool isFolder)
 {
     if (isFolder) {
         if (folderHandler.folderExists(path.toLocalFile())) {
             return false;
         }
 
-       return folderHandler.createFolder(path);
+        return folderHandler.createFolder(path);
     }
 
     if (folderHandler.fileExists(path)) {
@@ -49,7 +49,7 @@ bool ActionController::replaceFolderFile(const QUrl &path, const QUrl& pathToRep
     return folderHandler.replaceFolderFile(path, pathToReplace);
 }
 
-bool ActionController::copyFolder(const QUrl &from, const QUrl &to)
+bool ActionController::copyFolderFIle(const QUrl &from, const QUrl &to)
 {
     if (!folderHandler.isFolder(to)) {
         return false;
@@ -70,7 +70,7 @@ bool ActionController::makeCopy(const QUrl &path)
     return false;
 }
 
-bool ActionController::deleteFolder(const QUrl &path)
+bool ActionController::deleteFolderFile(const QUrl &path)
 {
     if (folderHandler.isFolder(path)) {
         return folderHandler.deleteFolder(path);

@@ -4,8 +4,7 @@ import filesystembrowser 1.0
 
 import BrowseController 1.0
 
-TreeView
-{
+TreeView {
     id: root
 
     property string file: "file:///C:/"
@@ -13,8 +12,7 @@ TreeView
     model: fileSystemModel
     rootIndex: rootPathIndex
 
-    TableViewColumn
-    {
+    TableViewColumn {
         title: "Name"
         role: "fileName"
         resizable: true
@@ -23,6 +21,5 @@ TreeView
     onActivated: {
         var url = fileSystemModel.data(index, FileSystemModel.UrlStringRole);
         BrowseController.addForward(url);
-        //root.file = url;
     }
 }

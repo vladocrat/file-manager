@@ -9,11 +9,13 @@
         <file>WarningPopup.qml</file>
         <file>ElemActionMenue.qml</file>
         <file>ActionConfirmationPopup.qml</file>
-        <file>ReplaceConfirmationPopup.qml</file>
         <file>TopBar.qml</file>
         <file>NavigationButton.qml</file>
         <file>images/file.png</file>
         <file>images/folder.png</file>
         <file>FilePreview.qml</file>
+        <file>ButtonsRow.qml</file>
+        <file>CustomPopup.qml</file>
+        <file>PopupButton.qml</file>
     </qresource>
 </RCC>

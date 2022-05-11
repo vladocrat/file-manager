@@ -1,8 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
 
-ColumnLayout
-{
+ColumnLayout {
     id: root
 
     //TODO if file name is too large it goes out of bounds
@@ -13,16 +12,14 @@ ColumnLayout
     property string creationDate: ""
     property bool isFolder: true
 
-    Text
-    {
+    Text {
         text: root.fileName
         font.pointSize: 12
 
         Layout.alignment: Qt.AlignCenter
     }
 
-    Image
-    {
+    Image {
         source: root.isFolder ?  "/images/folder.png" : "/images/file.png"
 
         Layout.preferredHeight: 60
@@ -30,22 +27,19 @@ ColumnLayout
         Layout.alignment: Qt.AlignCenter
     }
 
-    Text
-    {
+    Text {
         text: "fileSize: " + root.fileSize
 
         Layout.alignment: Qt.AlignCenter
     }
 
-    Text
-    {
+    Text {
         text: "creation date: " + root.creationDate
 
         Layout.alignment: Qt.AlignCenter
     }
 
-    Item
-    {
+    Item {
         Layout.fillHeight: true
     }
 }

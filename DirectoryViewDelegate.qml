@@ -5,14 +5,15 @@ import BrowseController 1.0
 import ActionController 1.0
 import FileInfo 1.0
 
-Rectangle
-{
+Rectangle {
     id: root
 
     signal currentItemChanged(var name, var size, var creationDate, var isFolder);
     signal mouseEntered();
     signal mouseExited();
     signal currentIndexChanged(var index);
+    signal copyUrlChanged(var url);
+    signal showMessage(var msg);
 
     property string pressedColor: "#999494"
     property string hoverColor: "grey"
@@ -20,7 +21,7 @@ Rectangle
     property string notSeleceted: "white"
 
     color: {
-        if(mouseArea.pressed) {
+        if (mouseArea.pressed) {
             return pressedColor;
         } else if (mouseArea.containsMouse) {
             return ListView.isCurrentItem ? selectedColor : hoverColor;
@@ -30,46 +31,42 @@ Rectangle
         return notSeleceted;
     }
 
-    QtObject
-    {
-        id: internal
-
-        property bool canDrop: false
-    }
-
-    Image
-    {
+    Image {
         id: image
 
         width: 20
         height: 20
         source: folderModel.isFolder(index) ? "/images/folder.png" : "/images/file.png"
 
-        anchors
-        {
+        anchors {
             verticalCenter: parent.verticalCenter
             left: root.left
             leftMargin: 10
         }
     }
 
-    Text
-    {
-        id: text
-
+    Text {
         leftPadding: 10
         text: fileName
-        anchors
-        {
+        anchors {
             verticalCenter: parent.verticalCenter
             left: image.right
         }
     }
 
-    ElemActionMenue { id: elemActionMenu }
+    ElemActionMenue {
+        id: elemActionMenu
 
-    MouseArea
-    {
+        onCopy: {
+            root.copyUrlChanged(url);
+        }
+
+        onShowMessage: {
+            root.showMessage(msg);
+        }
+    }
+
+    MouseArea {
         id: mouseArea
 
         anchors.fill: parent
@@ -78,7 +75,7 @@ Rectangle
         acceptedButtons: Qt.AllButtons
 
         onEntered: {
-           root.mouseEntered();
+            root.mouseEntered();
         }
 
         onExited: {
@@ -115,14 +112,14 @@ Rectangle
 
             if (folderModel.isFolder(index)) {
                 BrowseController.addForward(url);
+                root.mouseExited();
             } else {
                 Qt.openUrlExternally(url);
             }
         }
     }
 
-    Rectangle
-    {
+    Rectangle {
         id: dragRect
 
         property int dragItemIndex: index
@@ -130,15 +127,8 @@ Rectangle
         states: [
             State {
                 when: dragRect.Drag.active
-                //TODO What does it do exactly?
-//                ParentChange
-//                {
-//                    target: dragRect
-//                   // parent: root.parent
-//                }
 
-                AnchorChanges
-                {
+                AnchorChanges {
                     target: dragRect
                     anchors.horizontalCenter: undefined
                     anchors.verticalCenter: undefined
@@ -152,17 +142,16 @@ Rectangle
         Drag.hotSpot.y: dragRect.height / 2
     }
 
-
-    DropArea
-    {
+    DropArea {
         id: dragTarget
 
         property var dragItemIndex
+        property bool canDrop: false
 
         width: root.width
         height: root.height
 
-        onEntered:  {
+        onEntered: {
             dragItemIndex = drag.source.dragItemIndex
         }
 
@@ -172,19 +161,15 @@ Rectangle
             console.log("from: " + from);
             console.log("to: " + to);
 
-            if (!internal.canDrop) {
+            if (!dragTarget.canDrop) {
                 console.log("can't drop here");
                 return;
             }
 
-            //TODO add popup
-            console.log("folder moved: " + ActionController.moveFolder(from, to));
-        }
 
-        //TODO needed at all? look at Win10 impl
-        function setUpMessageBox(msg) {
-            warningPopup.msg = msg;
-            warningPopup.open();
+            if (!ActionController.moveFolder(from, to)) {
+                root.showMessage("failed to move " + folderModel.isFolder(dragItemIndex));
+            }
         }
 
         states: [
@@ -202,7 +187,7 @@ Rectangle
                 }
 
                 PropertyChanges {
-                    target: internal
+                    target: dragTarget
                     canDrop: {
                         if (dragTarget.dragItemIndex === dragRect.dragItemIndex) {
                             return false;

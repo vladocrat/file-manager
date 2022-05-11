@@ -3,117 +3,44 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import ActionController 1.0
 
-Popup
-{
+CustomPopup {
     id: root
 
-    property string msg: ""
-    property string url: ""
-    //true -> folder, false -> file
-    property bool folder: true
+    signal cancel();
+    signal confirm();
 
-    x: Math.round((parent.width - width) / 2)
-    y: Math.round((parent.height - height) / 2)
-    width: 300
-    height: 150
-    modal: true
-    focus: true
-    closePolicy: Popup.CloseOnEscape
+    property string msg: "message"
+    property bool isFolder: true
+    property int inputFontPointSize: 12
+    property real verticalItemSpacing: 5
 
-    ColumnLayout
-    {
+
+    ColumnLayout {
         anchors.fill: parent
-        spacing: 5
+        spacing: root.verticalItemSpacing
 
-        Rectangle
-        {
+        Item {
+            //TODO add params to public interface
             width: root.width - root.horizontalPadding - 1
             height: root.height / 2
 
-            Text
-            {
-                text: {
-                    var path = getShortPath(root.url)
-                    if (folder) {
-                        return msg + " folder \"" + path + "\"?";
-                    }
-                    return  msg + "file \"" + path + "\"?";
-                }
-
-                font.pointSize: 12
-                anchors
-                {
+            Text {
+                text: root.msg
+                font.pointSize: root.inputFontPointSize
+                anchors {
                     horizontalCenter: parent.horizontalCenter
                     verticalCenter: parent.verticalCenter
                 }
             }
-
         }
 
-        Row
-        {
-            spacing: 40
+        ButtonsRow {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            Rectangle
-            {
-                width: 2
-                height: 35
-            }
+            onCancel: root.cancel();
 
-            Button
-            {
-                id: cancel
-
-                width: 70
-                height: 35
-
-                Text
-                {
-                    text: "cancel"
-                    anchors
-                    {
-                        verticalCenter: parent.verticalCenter
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
-                onClicked: {
-                    root.close();
-                }
-            }
-
-            Button
-            {
-                id: comfirm
-
-                width: 70
-                height: 35
-
-                Text
-                {
-                    text: "confirm"
-                    anchors
-                    {
-                        verticalCenter: parent.verticalCenter
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
-                onClicked: {
-                    var path = getShortPath(url);
-                    var msg = "unable to delete"
-
-                    if (!ActionController.deleteFolder(url)) {
-
-                    }
-                    root.close();
-                }
-            }
+            onConfirm: root.confirm();
         }
-    }
-
-    function getShortPath(url) {
-        var arr = url.split("/");
-        return arr[arr.length - 1];
     }
 }

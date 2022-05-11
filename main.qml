@@ -9,44 +9,107 @@ import filesystembrowser 1.0
 import BrowseController 1.0
 
 
-Window
-{
+Window {
     id: root
 
-    width: 840
-    height: 480
+    width: 900
+    height: 600
     visible: true
     title: qsTr("File Browser")
 
-    TopBar { id: topBar }
+    TopBar {
+        id: topBar
 
-    PopupDialog { id: createFolderFilePopup }
-
-    WarningPopup { id: warningPopup }
-
-    ActionConfirmationPopup { id: actionConfirmationPopup }
-
-    ReplaceConfirmationPopup { id: replaceConfirmationPopup }
-
-    DirectoryBrowser
-    {
-        id: directoryBrowser
-
-        width: parent.width / 4
-        height: parent.height
-        anchors.top: topBar.bottom
+        anchors.top: parent.top
+        height: 35
+        width: parent.width
     }
 
-    DirectoryView
-    {
+    PopupDialog {
+        id: createFolderFilePopup
+
+        width: 300
+        height: 120
+        confirmEnabled: createFolderFilePopup.userInput.length > 0
+
+
+        onCancel: {
+            createFolderFilePopup.clearAndClose();
+        }
+
+        onConfirm: {
+            //TODO shouldn't be passed like this
+            var fullFilePath = BrowseController.current + "/" + createFolderFilePopup.userInput;
+            console.log("full path to isFolder/file: " + fullFilePath);
+
+            if (!ActionController.createFolderFile(fullFilePath, createFolderFilePopup.isFolder)) {
+                var type = createFolderFilePopup.isFolder ? "folder" : "file";
+                warningPopup.msg = "failed to create " + type;
+                warningPopup.open();
+            }
+
+            createFolderFilePopup.clearAndClose();
+        }
+    }
+
+    WarningPopup {
+        id: warningPopup
+
+        width: 300
+        height: 125
+
+        onCloseClicked: {
+            warningPopup.close();
+        }
+    }
+
+    ActionConfirmationPopup {
+        id: actionConfirmationPopup
+
+        width: 300
+        height: 150
+
+        onCancel: {
+
+        }
+
+        onConfirm: {
+
+        }
+
+    }
+
+    DirectoryBrowser {
+        id: directoryBrowser
+
+        width: root.width / 4
+        height: root.height
+        anchors {
+            top: topBar.bottom
+            bottom: root.bottom
+            bottomMargin: 50
+        }
+    }
+
+    DirectoryView {
         id: directoryView
 
         width: root.width / 2
         height: root.height
-        anchors
-        {
+        anchors {
             left: directoryBrowser.right
             top: topBar.bottom
+        }
+
+        onShowMessage: {
+            warningPopup.msg = msg;
+            warningPopup.open();
+        }
+
+        onCreateFolderFile: {
+            createFolderFilePopup.isFolder = isFolder
+            createFolderFilePopup.msg = msg
+            createFolderFilePopup.open();
         }
 
         onItemSelected: {
@@ -57,19 +120,15 @@ Window
         }
     }
 
-
-    FilePreview
-    {
+    FilePreview {
         id: filePreview
 
         height: root.height
         width: root.width - directoryBrowser.width - directoryView.width
-        anchors
-        {
+        anchors {
             left: directoryView.right
             top: topBar.bottom
             right: root.right
         }
-
     }
 }

@@ -1,61 +1,34 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 
-Popup
-{
+CustomPopup {
     id: root
 
-    property string msg: ""
+    signal closeClicked();
 
-    x: Math.round((parent.width - width) / 2)
-    y: Math.round((parent.height - height) / 2)
-    width: 300
-    height: 125
-    modal: true
-    focus: true
-    closePolicy: Popup.CloseOnEscape
+    property string msg: "message"
+    property string closeBtntext: "close"
+    property int fontPointSize: 13
+    property string buttonHoverColor: "yellow"
+    property int buttonAlignment: Qt.AlignCenter
+    property int textAlignment: Qt.AlignCenter
 
-    //TODO remove rectangle and use what popup provides
-    Rectangle
-    {
-        id: container
-
+    ColumnLayout {
         anchors.fill: parent
 
-        Text
-        {
-            id: message
-
-            text: msg
-            font.pointSize: 13
-            anchors.horizontalCenter: parent.horizontalCenter
-           // anchors.leftMargin: root.horizontalPadding / 2
+        Text {
+            text: root.msg
+            font.pointSize: root.fontPointSize
+            Layout.alignment: root.textAlignment
         }
 
-        Button
-        {
-            anchors
-            {
-                top: message.bottom
-                left: container.left
-                topMargin: 20
-                //leftMargin: root.width / 4
-                horizontalCenter: parent.horizontalCenter
-            }
+        PopupButton {
+            text: root.closeBtntext
+            Layout.alignment: root.buttonAlignment
+            hoverColor: root.buttonHoverColor
 
-            Text
-            {
-                text: "close"
-                anchors
-                {
-                    verticalCenter: parent.verticalCenter
-                    horizontalCenter: parent.horizontalCenter
-                }
-            }
-
-            onClicked: {
-                root.close();
-            }
+            onClicked: root.closeClicked();
         }
     }
 }

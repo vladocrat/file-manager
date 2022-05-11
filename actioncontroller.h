@@ -12,13 +12,13 @@ class ActionController : public QObject
 public:
     explicit ActionController(QObject *parent = nullptr);
 
-    Q_INVOKABLE bool moveFolder(const QUrl& from, const QUrl& to);
+    Q_INVOKABLE bool moveFolderFile(const QUrl& from, const QUrl& to);
     Q_INVOKABLE bool moveDirUp(const QUrl& path);
-    Q_INVOKABLE bool createDir(const QUrl& path, bool isFolder);
+    Q_INVOKABLE bool createFolderFile(const QUrl& path, bool isFolder);
     Q_INVOKABLE bool replaceFolderFile(const QUrl &path, const QUrl& pathToReplace);
-    Q_INVOKABLE bool copyFolder(const QUrl& from, const QUrl& to);
+    Q_INVOKABLE bool copyFolderFIle(const QUrl& from, const QUrl& to);
     Q_INVOKABLE bool makeCopy(const QUrl& path);
-    Q_INVOKABLE bool deleteFolder(const QUrl& path);
+    Q_INVOKABLE bool deleteFolderFile(const QUrl& path);
 
     static void registerType() {
         static ActionController ac;

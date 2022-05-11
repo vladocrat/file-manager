@@ -4,127 +4,69 @@ import QtQuick.Layouts 1.12
 import BrowseController 1.0
 import ActionController 1.0
 
-Popup
-{
+CustomPopup {
     id: root
 
-    property string folderName: ""
-    property string fileName: ""
-    property string msg: ""
+    signal confirm();
+    signal cancel();
 
-    //true -> folder, false -> file
-    property bool folder: true
+    //TODO not complited interface
+    property alias userInput: textInput.text
+    property int inputFontPointSize: 11
+    property bool focusInputField: true
+    property bool confirmEnabled: true
+    property bool cancelEnabled: true
+    property bool isFolder: true
+    property string msg: {
+        var type = root.isFolder ? "folder" : "file";
+        return "enter a name for a " + type;
+    }
 
-    x: Math.round((parent.width - width) / 2)
-    y: Math.round((parent.height - height) / 2)
-    width: 300
-    height: 150
-    modal: true
-    focus: true
-    closePolicy: Popup.CloseOnEscape
+    function clearAndClose() {
+        root.userInput = "";
+        root.close();
+    }
 
     ColumnLayout {
-
         anchors.fill: parent
-        spacing: 5
+        spacing: 12
 
         Text {
             text: root.msg
         }
 
-        Rectangle
-        {
+        Rectangle {
             id: inputField
 
-            width: root.width - height
+            width: root.width / 1.2
             height: root.height / 4
+            Layout.alignment: Qt.AlignCenter
             border.width: 1
 
-            TextInput
-            {
+            TextInput {
                 id: textInput
 
-                focus: true
-                anchors.fill: parent
-                anchors.leftMargin: 5
+                focus: root.focusInputField
                 verticalAlignment: TextInput.AlignVCenter
-                font.pointSize: 11
+                font.pointSize: root.inputFontPointSize
+                anchors {
+                    fill: parent
+                    leftMargin: 5
+                }
             }
         }
 
-        Row
-        {
-            spacing: 40
+        ButtonsRow {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            confirmEnabled: root.confirmEnabled
+            cancelEnabled: root.cancelEnabled
 
-            Rectangle
-            {
-                width: 2
-                height: 35
-            }
+            onCancel: root.cancel();
 
-            Button
-            {
-                id: cancel
-
-                width: 70
-                height: 35
-
-                Text
-                {
-                    text: "cancel"
-                    anchors
-                    {
-                        verticalCenter: parent.verticalCenter
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
-                onClicked: {
-                    textInput.text = "";
-                    root.close();
-                }
-            }
-
-            Button
-            {
-                id: accept
-
-                width: 70
-                height: 35
-
-                hoverEnabled: true
-                enabled: textInput.text.length > 0
-
-                Text
-                {
-                    text: "accept"
-                    anchors
-                    {
-                        verticalCenter: parent.verticalCenter
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                }
-
-                onClicked: {
-                    root.folderName = textInput.text;
-                    var fullFilePath = BrowseController.current + "/" + textInput.text;
-                    console.log("full path to folder/file: " + fullFilePath);
-
-
-                    if (ActionController.createDir(fullFilePath, root.folder)) {
-                        //TODO something with popups?
-                    }
-
-                    textInput.text = "";
-                    root.close();
-                }
-
-                //TODO remove?
-                function setMessageAndOpenWarningPopup(msg) {
-                    warningPopup.msg = msg;
-                    warningPopup.open();
-                }
-            }
+            onConfirm: root.confirm();
         }
     }
 }
+
+

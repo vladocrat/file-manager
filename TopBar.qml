@@ -2,14 +2,11 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import BrowseController 1.0
 
-Rectangle
-{
+Rectangle {
     id: root
 
-    property string currentDir : BrowseController.current
-    anchors.top: parent.top
-    height: 25
-    width: parent.width
+    property string currentDir: BrowseController.current
+
     border.width: 1
 
     NavigationButton {
@@ -17,7 +14,7 @@ Rectangle
 
         enabled: BrowseController.backwardAvaliable
         height: parent.height
-        width: 40
+        width: 45
         text: "<<"
 
         onClicked: {
@@ -30,7 +27,7 @@ Rectangle
 
         enabled: BrowseController.forwardAvaliable
         height: parent.height
-        width: 40
+        width: 45
         anchors.left: backWardButton.right
         text: ">>"
 
@@ -39,8 +36,7 @@ Rectangle
         }
     }
 
-    Text
-    {
+    Text {
         anchors
         {
             verticalCenter: parent.verticalCenter

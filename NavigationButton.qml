@@ -4,6 +4,9 @@ import QtQuick.Controls 2.12
 Button {
     id: root
 
+    property string hoveredColor: "black"
+    property string idleColor: "grey"
+
     hoverEnabled: true
 
     background: Rectangle {
@@ -15,6 +18,6 @@ Button {
     }
 
     onHoveredChanged: {
-        background.color = hovered ? "black" : "grey"
+        background.color = hovered ? hoveredColor : idleColor
     }
 }
