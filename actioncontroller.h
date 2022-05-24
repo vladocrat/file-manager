@@ -1,4 +1,4 @@
-#ifndef ACTIONCONTROLLER_H
+    #ifndef ACTIONCONTROLLER_H
 #define ACTIONCONTROLLER_H
 
 #include <QObject>

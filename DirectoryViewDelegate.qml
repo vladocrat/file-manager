@@ -8,17 +8,17 @@ import FileInfo 1.0
 Rectangle {
     id: root
 
-    signal currentItemChanged(var name, var size, var creationDate, var isFolder);
+    signal currentItemChanged(var name, var size, var creationDate, var isFolder, var sizeUnits);
     signal mouseEntered();
     signal mouseExited();
     signal currentIndexChanged(var index);
     signal copyUrlChanged(var url);
-    signal showMessage(var msg);
+    signal showPopupMessage(var msg);
 
-    property string pressedColor: "#999494"
-    property string hoverColor: "grey"
-    property string selectedColor: "#5f67fa"
-    property string notSeleceted: "white"
+    property color pressedColor: "#999494"
+    property color hoverColor: "grey"
+    property color selectedColor: "#5f67fa"
+    property color notSeleceted: "white"
 
     color: {
         if (mouseArea.pressed) {
@@ -54,15 +54,40 @@ Rectangle {
         }
     }
 
-    ElemActionMenue {
+    ContextMenue {
         id: elemActionMenu
 
-        onCopy: {
-            root.copyUrlChanged(url);
+        ContextMenuItem {
+            text: "delete"
+
+            onTriggered: {
+                var url = folderModel.get(index, "fileUrl");
+                if (!ActionController.deleteFolderFile(url)) {
+                    root.showPopupMessage("failed to delete: " + url);
+                }
+            }
         }
 
-        onShowMessage: {
-            root.showMessage(msg);
+        ContextMenuItem {
+            text: "move up"
+
+            onTriggered: {
+                var url = folderModel.get(index, "fileUrl");
+                if (!ActionController.moveDirUp(url)) {
+                    root.showPopupMessage("failed to move dir up");
+                }
+            }
+        }
+
+        ContextMenuItem {
+            text: "copy"
+
+            onTriggered: {
+                var url = folderModel.get(index, "fileUrl");
+                console.log("copy url is: " + url);
+
+                root.copyUrlChanged(url);
+            }
         }
     }
 
@@ -102,7 +127,8 @@ Rectangle {
             var size = FileInfo.size(url);
             var date = FileInfo.creationDate(url);
             var isFolder = FileInfo.isFolder(url);
-            root.currentItemChanged(name, size, date, isFolder);
+            var sizeUnits = FileInfo.sizeUnits();
+            root.currentItemChanged(name, size, date, isFolder, sizeUnits);
         }
 
         onDoubleClicked: {
@@ -168,7 +194,7 @@ Rectangle {
 
 
             if (!ActionController.moveFolder(from, to)) {
-                root.showMessage("failed to move " + folderModel.isFolder(dragItemIndex));
+                root.showPopupMessage("failed to move " + folderModel.isFolder(dragItemIndex));
             }
         }
 

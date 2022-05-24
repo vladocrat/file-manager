@@ -4,8 +4,8 @@ import QtQuick.Controls 2.12
 Button {
     id: root
 
-    property string hoveredColor: "black"
-    property string idleColor: "grey"
+    property color hoveredColor: "black"
+    property color idleColor: "grey"
 
     hoverEnabled: true
 

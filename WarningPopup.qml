@@ -7,26 +7,23 @@ CustomPopup {
 
     signal closeClicked();
 
+    property alias closeButton: closeButton
     property string msg: "message"
-    property string closeBtntext: "close"
-    property int fontPointSize: 13
-    property string buttonHoverColor: "yellow"
-    property int buttonAlignment: Qt.AlignCenter
-    property int textAlignment: Qt.AlignCenter
+    property int msgFontPointSize: 13
 
     ColumnLayout {
         anchors.fill: parent
 
         Text {
             text: root.msg
-            font.pointSize: root.fontPointSize
-            Layout.alignment: root.textAlignment
+            font.pointSize: root.msgFontPointSize
+            Layout.alignment: Qt.AlignCenter
         }
 
         PopupButton {
-            text: root.closeBtntext
-            Layout.alignment: root.buttonAlignment
-            hoverColor: root.buttonHoverColor
+            id: closeButton
+
+            Layout.alignment: Qt.AlignCenter
 
             onClicked: root.closeClicked();
         }

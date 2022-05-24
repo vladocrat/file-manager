@@ -13,8 +13,6 @@ CustomPopup {
     property int msgFontPointSize: 12
     property bool isFolder: true
 
-    Component.onCompleted: open()
-
     ColumnLayout {
         anchors.fill: parent
         spacing: 2

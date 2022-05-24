@@ -16,7 +16,7 @@ public:
     bool copyFolder(const QUrl& from, const QUrl& to);
     bool folderExists(const QString& path);
     bool moveUp(const QUrl& path);
-    bool isFolder(const QUrl& path);
+    static bool isFolder(const QUrl& path);
 
     //files
     bool createFile(const QUrl& path);

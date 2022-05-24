@@ -10,7 +10,8 @@ SOURCES += \
         displayfilesystemmodel.cpp \
         fileinfo.cpp \
         folderhandler.cpp \
-        main.cpp
+        main.cpp \
+        sizeconverter.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,6 +31,7 @@ HEADERS += \
     browsecontroller.h \
     displayfilesystemmodel.h \
     fileinfo.h \
-    folderhandler.h
+    folderhandler.h \
+    sizeconverter.h
 
 DISTFILES +=

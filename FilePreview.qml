@@ -5,9 +5,8 @@ ColumnLayout {
     id: root
 
     //TODO if file name is too large it goes out of bounds
-    //TODO folder size isn't calculated
-    //TODO untis for size aren't shown
-    property string fileName
+    property string sizeUnits: ""
+    property string fileName: ""
     property int fileSize: 0
     property string creationDate: ""
     property bool isFolder: true
@@ -28,13 +27,19 @@ ColumnLayout {
     }
 
     Text {
-        text: "fileSize: " + root.fileSize
+        text: "fileSize: " + root.fileSize + " " + root.sizeUnits
 
         Layout.alignment: Qt.AlignCenter
     }
 
     Text {
         text: "creation date: " + root.creationDate
+
+        Layout.alignment: Qt.AlignCenter
+    }
+
+    Text {
+        text: "units: " + root.sizeUnits
 
         Layout.alignment: Qt.AlignCenter
     }

@@ -120,12 +120,14 @@ Window {
             filePreview.fileName = name
             filePreview.fileSize = size
             filePreview.creationDate = creationDate
+            filePreview.sizeUnits = sizeUnits
         }
     }
 
     FilePreview {
         id: filePreview
 
+        visible: directoryView.isItemSelected
         height: root.height
         width: root.width - directoryBrowser.width - directoryView.width
         anchors {

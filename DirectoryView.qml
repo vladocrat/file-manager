@@ -9,10 +9,11 @@ import BrowseController 1.0
 Rectangle {
     id: root
 
-    signal itemSelected(var name, var size, var creationDate, var isFolder);
+    signal itemSelected(var name, var size, var creationDate, var isFolder, var sizeUnits);
     signal createFolderFile(var msg, var isFolder);
     signal showPopupMessage(var msg);
 
+    property bool isItemSelected: false
     property string copyUrl: ""
 
     color: "white"
@@ -40,9 +41,8 @@ Rectangle {
             onTriggered: {
                 var pasteUrl = BrowseController.current
                 console.log("pasteUrl: " + pasteUrl);
-                console.log("copyUrl: " + directoryView.copyUrl);
-                //Shouldn't reference directory view?
-                var index = folderModel.indexOf(copyUrl);
+                console.log("copyUrl: " + root.copyUrl);
+                var index = folderModel.indexOf(root.copyUrl);
                 if (!ActionController.copyFolderFile(copyUrl, pasteUrl)) {
                     root.showPopupMessage("failed to copy");
                 }
@@ -66,7 +66,7 @@ Rectangle {
             width: listView.width
             height: 40
 
-            onShowMessage: {
+            onShowPopupMessage: {
                 root.showPopupMessage(msg);
             }
 
@@ -88,7 +88,8 @@ Rectangle {
             }
 
             onCurrentItemChanged: {
-                root.itemSelected(name, size, creationDate, isFolder);
+                root.isItemSelected = true;
+                root.itemSelected(name, size, creationDate, isFolder, sizeUnits);
             }
         }
     }

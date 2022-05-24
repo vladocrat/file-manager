@@ -11,11 +11,11 @@ ActionController::ActionController(QObject *parent)
 
 bool ActionController::moveFolderFile(const QUrl &from, const QUrl &to)
 {
-    if (!folderHandler.isFolder(to)) {
+    if (!FolderHandler::isFolder(to)) {
         return false;
     }
 
-    if (folderHandler.isFolder(from)) {
+    if (FolderHandler::isFolder(from)) {
         return folderHandler.moveFolder(from, to);
     }
 
@@ -51,11 +51,11 @@ bool ActionController::replaceFolderFile(const QUrl &path, const QUrl& pathToRep
 
 bool ActionController::copyFolderFIle(const QUrl &from, const QUrl &to)
 {
-    if (!folderHandler.isFolder(to)) {
+    if (!FolderHandler::isFolder(to)) {
         return false;
     }
 
-    if (folderHandler.isFolder(from)) {
+    if (FolderHandler::isFolder(from)) {
         return folderHandler.copyFolder(from, to);
     }
     return folderHandler.copyFile(from, to);
@@ -64,7 +64,7 @@ bool ActionController::copyFolderFIle(const QUrl &from, const QUrl &to)
 bool ActionController::makeCopy(const QUrl &path)
 {
     //TODO
-    if (folderHandler.isFolder(path)) {
+    if (FolderHandler::isFolder(path)) {
         return false;
     }
     return false;
@@ -72,7 +72,7 @@ bool ActionController::makeCopy(const QUrl &path)
 
 bool ActionController::deleteFolderFile(const QUrl &path)
 {
-    if (folderHandler.isFolder(path)) {
+    if (FolderHandler::isFolder(path)) {
         return folderHandler.deleteFolder(path);
     }
     return folderHandler.deleteFile(path);
